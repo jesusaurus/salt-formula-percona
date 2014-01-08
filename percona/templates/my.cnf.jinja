@@ -1,0 +1,82 @@
+[client]
+port            = 3306
+socket          = /var/run/mysqld/mysqld.sock
+
+[mysqld_safe]
+socket          = /var/run/mysqld/mysqld.sock
+nice            = 0
+
+[mysqld]
+user                    = mysql
+pid-file                = /var/run/mysqld/mysqld.pid
+socket                  = /var/run/mysqld/mysqld.sock
+port                    = 3306
+basedir                 = /usr
+datadir                 = /var/lib/mysql
+default_storage_engine  = InnoDB
+tmpdir                  = /tmp
+
+skip-name-resolve
+
+lc-messages-dir         = /usr/share/mysql
+skip-external-locking
+key_buffer              = 16M
+max_connections         = {{ salt['pillar.get']('percona:max_connections', 100) }}
+max_allowed_packet      = 16M
+thread_stack            = 192K
+thread_cache_size       = 8
+
+myisam-recover          = BACKUP
+query_cache_limit       = 1M
+query_cache_size        = 16M
+
+log_error               = /var/log/mysql/error.log
+slow_query_log          = /var/log/mysql/mysql-slow.log
+long_query_time         = {{ salt['pillar.get']('percona:long_query_time', 2) }}
+log-queries-not-using-indexes
+
+server-id               = {{ nodes.get(grains.host, {}).get('server_id', 1) }}
+log_bin                 = /var/log/mysql/mysql-bin.log
+sync_binlog             = 1
+binlog_format           = ROW
+expire_logs_days        = 10
+max_binlog_size         = 100M
+log_slave_updates
+
+wsrep_provider          = /usr/lib/libgalera_smm.so
+wsrep_slave_threads     = 4
+wsrep_sst_method        = xtrabackup
+wsrep_sst_auth          = xtrabackup:{{ salt['pillar.get']('percona:passwords:xtrabackup', '') }}
+wsrep_cluster_name      = {{ salt['pillar.get']('percona:wsrep_cluster_name', 'percona-cluster') }}
+wsrep_node_name         = {{ grains['host'] }}
+wsrep_node_address      = {{ salt['grains.get']('ip_interfaces:eth0')[0] }}
+wsrep_provider_options  = gcache.size=2G;
+
+{% if bootstrap_cluster -%}
+wsrep_cluster_address   = gcomm://?pc.bootstrap=yes
+{% else -%}
+wsrep_cluster_address   = gcomm://{{ ",".join(nodes.keys()) }}
+{% endif -%}
+
+
+innodb_autoinc_lock_mode        = 2
+innodb_locks_unsafe_for_binlog  = 1
+innodb_file_per_table
+innodb_thread_concurrency       = 0
+innodb_buffer_pool_size         = {{ (grains['mem_total'] | int * 0.6) | int }}K
+innodb_log_buffer_size          = 64M
+innodb_flush_method             = O_DIRECT
+innodb_log_file_size            = 500M
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet      = 16M
+
+[mysql]
+#no-auto-rehash # faster start of mysql but no tab completition
+
+[isamchk]
+key_buffer              = 16M
+
+!includedir /etc/mysql/conf.d/

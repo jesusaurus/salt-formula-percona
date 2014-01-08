@@ -1,0 +1,8 @@
+[client]
+port            = 3306
+user            = root
+password        = {{ salt['pillar.get']('percona:passwords:root', '' ) }}
+
+[mysqladmin]
+user            = root
+password        = {{ salt['pillar.get']('percona:passwords:root', '' ) }}

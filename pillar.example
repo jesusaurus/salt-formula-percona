@@ -1,0 +1,22 @@
+{% import_yaml "secrets.sls" as secrets %}
+percona:
+  max_connections: 100
+  long_query_time: 2
+
+  passwords:
+    root: {{ secrets.percona.root_password }}
+    salt: {{ secrets.percona.salt_password }}
+    debian_sys_maint: {{ secrets.percona.debian_sys_maint_password }}
+    xtrabackup: {{ secrets.percona.xtrabackup_password }}
+
+  nodes:
+    dns-ae1-2az1-percona0001:
+      server_id: 10
+
+    dns-ae1-2az2-percona0002:
+      server_id: 20
+
+    dns-ae1-2az3-percona0003:
+      server_id: 30
+
+
