@@ -13,7 +13,7 @@
 #    under the License.
 #
 percona-repo:
--  pkgrepo:
+  pkgrepo:
     - managed
     - file: /etc/apt/sources.list.d/percona.list
     - name: deb http://repo.percona.com/apt precise main
@@ -21,3 +21,7 @@ percona-repo:
     - keyid: 1C4CBDCDCD2EFD2A
     - keyserver: keys.gnupg.net
     - enabled: true
+    - require_in:
+      - pkg: percona-xtradb-cluster-server-5.6
+      - pkg: percona-xtradb-cluster-client-5.6
+      - pkg: percona-python-mysqldb

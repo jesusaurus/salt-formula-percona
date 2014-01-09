@@ -14,7 +14,7 @@
 #
 percona-python-mysqldb:
   pkg:
-    - latest
+    - installed
     - name: python-mysqldb
 
 /etc/salt/minion.d/minion-mysql.conf:

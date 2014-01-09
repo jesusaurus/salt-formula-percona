@@ -72,7 +72,7 @@ percona-preseed-root-password:
 
 percona-xtradb-cluster-server-5.6:
   pkg:
-    - latest
+    - installed
     - require:
       - debconf: percona-preseed-root-password
 

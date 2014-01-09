@@ -1,0 +1,4 @@
+base:
+  '*':
+    - percona.repo
+    - percona.cluster
