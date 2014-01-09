@@ -1,0 +1,4 @@
+[gerrit]
+host=gerrit.paas.hpcloud.net
+port=29418
+project=paas-share/salt/percona-formula.git
