@@ -4,11 +4,6 @@ Vagrant.configure("2") do |config|
 
   config.ssh.forward_agent = true
 
-  # LXC Specific Config
-  config.vm.provider :lxc do |lxc|
-    lxc.customize 'cgroup.memory.limit_in_bytes', '512M'
-  end
-
   # Enable the HostManager Provisioner
   config.vm.provision :hostmanager
 

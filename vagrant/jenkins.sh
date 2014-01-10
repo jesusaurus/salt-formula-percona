@@ -7,7 +7,7 @@ cd $DIR/../
 function on_exit()
 {
     mkdir -p $DIR/logs
-    
+
     vagrant ssh salt --command "sudo cp /var/log/salt/master /vagrant/vagrant/logs/salt-master"
     vagrant ssh percona1 --command "sudo cp /var/log/salt/minion /vagrant/vagrant/logs/percona1-minion"
     vagrant ssh percona2 --command "sudo cp /var/log/salt/minion /vagrant/vagrant/logs/percona2-minion"
@@ -21,6 +21,9 @@ trap on_exit EXIT
 echo "***** Building Instances:" &&
 vagrant up --provider lxc &&
 vagrant status &&
+
+echo "***** Delaying a few seconds for salt to be ready:"
+sleep 10 &&
 
 echo "***** Testing Ping:"
 vagrant ssh salt --command "sudo salt '*' test.ping" &&
