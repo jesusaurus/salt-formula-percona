@@ -1,5 +1,7 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "percise-amd64"
+  config.vm.box = "vagrant-lxc-precise-amd64"
+  config.vm.box_url = "https://region-b.geo-1.objects.hpcloudsvc.com/v1/10901205284417/vagrant/vagrant-lxc-precise-amd64-2014-01-10.box"
+
   config.ssh.forward_agent = true
 
   # LXC Specific Config
