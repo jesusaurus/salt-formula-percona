@@ -6,11 +6,14 @@ cd $DIR/../
 
 function on_exit()
 {
-    mkdir $DIR/logs
+    mkdir -p $DIR/logs
+    
     vagrant ssh salt --command "sudo cp /var/log/salt/master /vagrant/vagrant/logs/salt-master"
     vagrant ssh percona1 --command "sudo cp /var/log/salt/minion /vagrant/vagrant/logs/percona1-minion"
     vagrant ssh percona2 --command "sudo cp /var/log/salt/minion /vagrant/vagrant/logs/percona2-minion"
     vagrant ssh percona3 --command "sudo cp /var/log/salt/minion /vagrant/vagrant/logs/percona3-minion"
+
+    vagrant destroy -f
 }
 
 trap on_exit EXIT
