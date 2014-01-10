@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "test"
+  config.vm.box = "percise-amd64"
   config.ssh.forward_agent = true
 
   # LXC Specific Config
