@@ -1,5 +1,5 @@
 [client]
-port            = {{ salt['pillar.get']('percona:port', 3306) }}
+port            = 3306
 socket          = /var/run/mysqld/mysqld.sock
 
 [mysqld_safe]
@@ -35,7 +35,7 @@ slow_query_log          = /var/log/mysql/mysql-slow.log
 long_query_time         = {{ salt['pillar.get']('percona:long_query_time', 2) }}
 log-queries-not-using-indexes
 
-server-id               = {{ nodes.get(grains.host, {}).get('server_id', 1) }}
+server-id               = {{ salt['pillar.get']('percona:nodes', {}).get(grains.host, {}).get('server_id', 1) }}
 log_bin                 = /var/log/mysql/mysql-bin.log
 sync_binlog             = 1
 binlog_format           = ROW
@@ -52,12 +52,12 @@ wsrep_node_name         = {{ grains['host'] }}
 wsrep_node_address      = {{ salt['grains.get']('ip_interfaces:eth0')[0] }}
 wsrep_provider_options  = gcache.size=2G;
 
-{% if bootstrap_cluster -%}
-wsrep_cluster_address   = gcomm://?pc.bootstrap=yes
+{% if bootstrap is defined and bootstrap -%}
+# *** WARNING - CLUSTER BOOTSTRAP MODE ENABLED ***
+wsrep_cluster_address   = gcomm://
 {% else -%}
-wsrep_cluster_address   = gcomm://{{ ",".join(nodes.keys()) }}
+wsrep_cluster_address   = gcomm://{{ ",".join(salt['pillar.get']('percona:nodes', {}).keys()) }}
 {% endif -%}
-
 
 innodb_autoinc_lock_mode        = 2
 innodb_locks_unsafe_for_binlog  = 1

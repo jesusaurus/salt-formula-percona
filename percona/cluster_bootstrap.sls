@@ -12,26 +12,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 #
-
 include:
   - percona.cluster
 
-exclude:
-  - id: /etc/mysql/my.cnf
-
-/etc/mysql/my.cnf-bootstrap:
-  file:
-    - managed
-    - name: /etc/mysql/my.cnf
-    - source: salt://percona/templates/my.cnf.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 644
-    - context:
-        nodes: {{ salt['pillar.get']('percona:nodes', {}) }}
-        bootstrap_cluster: true
-    - require:
-      - file: /etc/mysql
-    - require_in:
-      - pkg: percona-xtradb-cluster-server-5.6
+extend:
+  /etc/mysql/my.cnf:
+    file:
+      - context:
+          bootstrap: true

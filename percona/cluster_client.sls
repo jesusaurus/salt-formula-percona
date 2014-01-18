@@ -12,24 +12,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 #
-percona-python-mysqldb:
+
+percona-client:
   pkg:
-    - installed
-    - name: python-mysqldb
-
-/etc/salt/minion.d/minion-mysql.conf:
-    file.managed:
-    - source: salt://percona/templates/minion-mysql.conf.jinja
-    - template: jinja
-    - require:
-      - pkg: python-mysqldb
-
-percona-salt-minion:
-  service:
-    - running
-    - enable: true
-    - name: salt-minion
-    - restart: True
-    - watch:
-      - pkg: python-mysqldb
-      - file: /etc/salt/minion.d/minion-mysql.conf
+    - latest
+    - name: percona-xtradb-cluster-client-5.6

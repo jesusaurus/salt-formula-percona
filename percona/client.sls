@@ -12,9 +12,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 #
-include:
-  - percona
 
-percona-xtradb-cluster-client-5.6:
+percona-client:
   pkg:
-    - installed
+    - latest
+    - name: percona-server-client-5.6

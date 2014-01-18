@@ -1,7 +1,0 @@
-# Managed by Salt
-mysql.host: '127.0.0.1'
-mysql.port: 3306
-mysql.user: 'salt'
-mysql.pass: '{{ salt['pillar.get']('percona:passwords:salt', '' ) }}'
-mysql.db: 'mysql'
-mysql.unix_socket: '/var/run/mysqld/mysqld.sock'
