@@ -4,9 +4,9 @@ percona:
 
   passwords:
     root: root-password
-    salt: salt-password
     debian_sys_maint: debian_sys_maint-password
     xtrabackup: xtrabackup-password
+    clustercheck: clustercheck-password
 
   nodes:
     percona1:

@@ -89,4 +89,3 @@ mysql:
 {% for grant in salt['pillar.get']('percona:grants', []) -%}
 {{ mysql_grant(grant.get('user'), grant.get("host", "localhost"), grant.get("database", "*.*"), grant.get("grant", None)) }}
 {% endfor %}
-

@@ -12,6 +12,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 #
+{% from "percona/macros.sls" import mysql_user with context %}
+{% from "percona/macros.sls" import mysql_grant with context %}
+
 include:
   - percona.common
   - percona.cluster_client
@@ -33,3 +36,35 @@ percona-server:
     - name: percona-xtradb-cluster-server-5.6
     - require:
       - debconf: percona-server
+
+######################
+## Clustercheck Script
+percona-xinetd:
+  pkg:
+    - installed
+    - name: xinetd
+  service:
+    - running
+    - name: xinetd
+    - require:
+      - pkg: percona-xinetd
+    - watch:
+      - file: percona-xinetd
+  file:
+    - append
+    - name: /etc/services
+    - text: "mysqlchk        9200/tcp                        # Percona Clustercheck"
+
+/usr/bin/clustercheck:
+  file:
+    - managed
+    - source: salt://percona/templates/clustercheck.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - pkg: percona-server
+
+{{ mysql_user("clustercheck", "localhost", salt['pillar.get']('percona:passwords:clustercheck', '')) }}
+{{ mysql_grant("clustercheck", "localhost", "*.*", grant='PROCESS') }}
