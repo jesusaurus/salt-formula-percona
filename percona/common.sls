@@ -17,11 +17,17 @@
 {% from "percona/macros.sls" import mysql_database with context %}
 {% from "percona/macros.sls" import mysql_grant with context %}
 
+# We need the python libs for the macros
+python-mysqldb:
+  pkg:
+    - installed
+
 mysql:
   service:
   - running
   - require:
     - pkg: percona-server
+    - pkg: python-mysqldb
 
 ########################
 ## General Configuration
@@ -68,7 +74,7 @@ mysql:
 
 ############################
 ## Required Users and Grants
-{{ mysql_user("debian_sys_maint", "localhost", salt['pillar.get']('percona:passwords:debian_sys_maint', '')) }}
+{{ mysql_user("debian-sys-maint", "localhost", salt['pillar.get']('percona:passwords:debian-sys-maint', '')) }}
 
 {{ mysql_user("root", "localhost", salt['pillar.get']('percona:passwords:root', '')) }}
 {{ mysql_grant("root", "localhost", "*.*", grant_option=True) }}

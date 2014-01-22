@@ -13,7 +13,7 @@
 #    under the License.
 #
 percona-repo:
-  - pkgrepo:
+  pkgrepo:
     - managed
     - file: /etc/apt/sources.list.d/percona.list
     - name: deb http://repo.percona.com/apt precise main

@@ -4,7 +4,7 @@ percona:
 
   passwords:
     root: root-password
-    debian_sys_maint: debian_sys_maint-password
+    debian-sys-maint: debian-sys-maint-password
     xtrabackup: xtrabackup-password
     clustercheck: clustercheck-password
 
